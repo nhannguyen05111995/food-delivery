@@ -22,14 +22,10 @@ function Nav() {
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
-                <Link className={pathname == "/" ? "active rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" : "rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"} href="/" aria-current="page">Home</Link>
+                <Link className={pathname == "/" ? "active rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" : "rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"} href="/" aria-current="page">Meals</Link>
                 <Link className={pathname == "/meals/add-meal" ? "active rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" : "rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"} href="/meals/add-meal" aria-current="page">Add Meal</Link>
+                <Link className={pathname == "/cart" ? "active rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" : "rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"} href="/cart" aria-current="page">Cart <Cart/></Link>
               </div>
-            </div>
-            <div className="flex shrink-0 items-right">
-              <Cart>
-                <Link className={pathname == "/cart" ? "active rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" : "rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"} href="/cart" aria-current="page">Cart</Link>
-              </Cart>
             </div>
           </div>
         </div>

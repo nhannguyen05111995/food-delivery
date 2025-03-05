@@ -1,4 +1,4 @@
-import { getData } from "../lib/actions"
+import { getData } from "../lib/actions.ts"
 import Item from "../component/Item"
 export default async function Page() {
     const data = await getData()    

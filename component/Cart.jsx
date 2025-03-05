@@ -4,8 +4,7 @@ export default function Cart({ children }) {
     const total = cart.items.reduce((acc, item) => acc + item.quantity, 0);
     return (
         <>
-            {children}
-            <span className='text-white'>{total}</span>
+            <span className='text-white'> {total}</span>
         </>
     );
 }

@@ -21,7 +21,7 @@ function validate(value, body) {
 
 }
 
-export async function POST(req) {
+export async function POST(req:Request) {
     const client = await MongoClient.connect(process.env.MONGODB_URI);
     const body = await req.json();
     const errors = validate('name', body) || validate('cuisine', body)

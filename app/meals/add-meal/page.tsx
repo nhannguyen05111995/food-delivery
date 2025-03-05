@@ -1,14 +1,15 @@
 'use client';
+import { redirect } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Page() {
     let [errors, setErrors] = useState<string[]>([])
-    let [res, setRes] = useState<string>('')
-    async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    let [loading, setLoading] = useState<boolean>(false)
 
+    async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+        setLoading(true)
         const formData = new FormData(event.currentTarget);
         event.preventDefault();
-        setRes('')
         const yy = {}
         let err: string[] = []
         for (let [key, value] of formData.entries()) {
@@ -21,6 +22,7 @@ export default function Page() {
         setErrors(err)
 
         if (err.length) {
+            setLoading(false)
             return
         }
         const res = await fetch('/api/meals', {
@@ -31,7 +33,11 @@ export default function Page() {
             body: JSON.stringify(yy),
         });
         const data = await res.json()
-        setRes(data.message)
+        setLoading(false)
+        if(data.status === 'success'){
+            redirect('/')
+
+        }
 
     }
     return (
@@ -56,8 +62,7 @@ export default function Page() {
                 </div>
 
                 <div className="form-actions">
-                    <p>{res}</p>
-                    <button className="button" type="submit">
+                    <button className="button" type="submit" disabled={loading}>
                         Add meal
                     </button>
                 </div>

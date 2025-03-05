@@ -11,7 +11,7 @@ button {
   cursor: pointer;
 }
 
-input{
+input {
   border: 1px solid;
   padding: 0.5rem 1rem;
   border-radius: 7px;
@@ -19,4 +19,9 @@ input{
 
 .error {
   border: 1px solid red;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  color: darkgray;
 }
