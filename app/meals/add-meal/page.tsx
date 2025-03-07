@@ -1,10 +1,18 @@
 'use client';
 import { redirect } from 'next/navigation';
 import { useState } from 'react';
+import Input from '../../../component/Input'
 
 export default function Page() {
     let [errors, setErrors] = useState<string[]>([])
     let [loading, setLoading] = useState<boolean>(false)
+    let [image, setImage] = useState<string>('')
+
+    const onImageChange = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            setImage(URL.createObjectURL(event.target.files[0]));
+        }
+    }
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         setLoading(true)
@@ -19,6 +27,8 @@ export default function Page() {
                 err.push(key)
             }
         }
+        console.log('err', err, formData.entries());
+
         setErrors(err)
 
         if (err.length) {
@@ -34,7 +44,7 @@ export default function Page() {
         });
         const data = await res.json()
         setLoading(false)
-        if(data.status === 'success'){
+        if (data.status === 'success') {
             redirect('/')
 
         }
@@ -43,30 +53,33 @@ export default function Page() {
     return (
         <div>
             <h1>Meals</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="control-row">
-                    <div>
-                        <label htmlFor="name">Name</label>
-                        <input className={errors.includes('name') ? 'error' : ''} type="text" name="name" id="name" />
+            <div className="w-full max-w-xs">
+                <form className="pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
+                    <div className="mb-4">
+                        <Input props={{ name: 'name', 'type': 'text', 'errors': errors }} />
                     </div>
+                    <div className="mb-4">
+                        <Input props={{ name: 'cuisine', 'type': 'text', 'errors': errors }} />
 
-                    <div >
-                        <label htmlFor="cuisine">Cuisine</label>
-                        <input className={errors.includes('cuisine') ? 'error' : ''} id="cuisine" type="text" name="cuisine" />
                     </div>
-                    
-                    <div >
-                        <label htmlFor="price">Price</label>
-                        <input className={errors.includes('price') ? 'error' : ''} id="price" type="number" name="price" />
+                    <div className="mb-4">
+                        <Input props={{ name: 'description', 'type': 'text', 'errors': errors }} />
                     </div>
-                </div>
+                    <div className="mb-4">
+                        <Input props={{ name: 'price', 'type': 'number', 'errors': errors }} />
+                    </div>
+                    <div className="mb-4">
+                        <Input props={{ name: 'image', 'type': 'file', 'errors': errors, onChange: onImageChange, accept: 'image/png, image/jpeg' }} />
+                        {image && <img alt="preview image" src={image} />}
 
-                <div className="form-actions">
-                    <button className="button" type="submit" disabled={loading}>
-                        Add meal
-                    </button>
-                </div>
-            </form>
+                    </div>
+                    <div className="flex items-center justify-between form-action">
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" disabled={loading}>
+                            Add meal
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }

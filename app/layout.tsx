@@ -30,7 +30,8 @@ export default function RootLayout({
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
           <Nav></Nav>
-          {children}
+          <div className="md:container md:mx-auto">          {children}
+          </div>
         </body>
       </html>
     </StoreProvider>

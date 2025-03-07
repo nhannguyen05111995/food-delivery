@@ -5,21 +5,11 @@
 }
 
 button {
-  border: 1px solid;
   padding: 0.5rem 1rem;
-  border-radius: 7px;
   cursor: pointer;
+  border-radius: 0;
 }
 
-input {
-  border: 1px solid;
-  padding: 0.5rem 1rem;
-  border-radius: 7px;
-}
-
-.error {
-  border: 1px solid red;
-}
 
 button:disabled {
   cursor: not-allowed;
