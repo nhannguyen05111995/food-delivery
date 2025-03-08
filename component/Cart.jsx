@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-export default function Cart({ children }) {
+export default function Cart() {
     const cart = useSelector((state) => state.cart);
     const total = cart.items.reduce((acc, item) => acc + item.quantity, 0);
     return (

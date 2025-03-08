@@ -1,36 +1,42 @@
+import { mongodbInit } from "@/lib/mongodb";
 import { NextResponse } from "next/server";
-import { MongoClient } from 'mongodb';
+import { uploadToS3 } from "@/lib/actions";
 
 export async function GET() {
-    const client = await MongoClient.connect(process.env.MONGODB_URI);
     try {
-        const db = client.db('food-delivery');
-        const meetupsCollection = await db.collection('meals');
-        const json = await meetupsCollection.find({}).toArray();
+        const collection = await mongodbInit()
+        const json = await collection.find({}).toArray();
         return NextResponse.json(json);
     } catch (err) {
         return NextResponse.json({ error: err.message });
     }
 }
 
-function validate(value, body) {
-    if (!body[value]) {
-        return `${value} is required`;
+
+
+function validate(value: string, formData: FormData): boolean {
+    if (formData.get(value)) {
+        return true
     }
-    return '';
+    return false;
 
 }
 
-export async function POST(req:Request) {
-    const client = await MongoClient.connect(process.env.MONGODB_URI);
-    const body = await req.json();
-    const errors = validate('name', body) || validate('cuisine', body)
-    if (errors) {
-        return NextResponse.json({ message: errors, status: 'failed' });
-    }
+export async function POST(req: Request) {
     try {
-        const db = client.db('food-delivery');
-        await db.collection("meals").insertOne(body);
+        const formData = await req.formData();
+        const err: boolean = !validate("name", formData) || !validate("cuisine", formData) || !validate("price", formData)
+        if (err) {
+            return NextResponse.json({ message: "Missing fields!", status: 'failed' });
+        }
+        const link = await uploadToS3(formData.get('image') as File)
+        let object: Record<string, string | File> = {};
+        formData.forEach(function (value, key) {
+            object[key] = value
+        });
+        object['image'] = link
+        const collection = await mongodbInit()
+        await collection.insertOne(object);
         return NextResponse.json({ message: 'Meal added', status: 'success' });
     } catch (err) {
         return NextResponse.json({ message: err.message, status: 'failed' });
