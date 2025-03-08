@@ -1,4 +1,4 @@
-import { getData } from "../../../lib/actions.ts";
+import { getData } from "@/lib/actions.ts";
 export default async function Page({ params }) {
     const { slug } = await params;    
     const meal = await getData(slug);

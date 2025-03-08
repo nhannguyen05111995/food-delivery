@@ -2,7 +2,7 @@
 
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { counterActions } from '../../lib/cart';
+import { counterActions } from '@/lib/cart';
 export default function Cart() {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();

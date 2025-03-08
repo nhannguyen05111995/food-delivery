@@ -1,7 +1,7 @@
 "use client";
 import { redirect } from "next/navigation";
 import React, { useRef, useState } from "react";
-import Input from "../../../component/Input";
+import Input from "@/component/Input";
 
 export default function Page() {
   let [errors, setErrors] = useState<string[]>([]);

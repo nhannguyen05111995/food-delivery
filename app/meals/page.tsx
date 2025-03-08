@@ -1,8 +1,6 @@
 export default async function Page() {
-    const res = await fetch('http://localhost:3000/api/meals');
-    const data = await res.json()
-    console.log(data);
-    
+    const res = await fetch('/api/meals');
+    const data = await res.json()    
     return (
         <div>
             <h1>Meals</h1>
