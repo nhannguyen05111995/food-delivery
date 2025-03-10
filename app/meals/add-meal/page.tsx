@@ -2,6 +2,7 @@
 import { redirect } from "next/navigation";
 import React, { useRef, useState } from "react";
 import Input from "@/component/Input";
+import Form from "@/component/Form";
 
 export default function Page() {
   let [errors, setErrors] = useState<string[]>([]);
@@ -51,50 +52,7 @@ export default function Page() {
         Here at Flowbite we focus on markets where technology, innovation, and
         capital can unlock long-term value and drive economic growth.
       </p>
-
-      <div className="w-full ">
-        <form
-          className="pt-6 pb-8 mb-4 max-w-xs mx-auto"
-          onSubmit={handleSubmit}
-        >
-          <div className="mb-4">
-            <Input props={{ name: "name", type: "text", errors: errors }} />
-          </div>
-          <div className="mb-4">
-            <Input props={{ name: "cuisine", type: "text", errors: errors }} />
-          </div>
-          <div className="mb-4">
-            <Input
-              props={{ name: "description", type: "text", errors: errors }}
-            />
-          </div>
-          <div className="mb-4">
-            <Input props={{ name: "price", type: "number", errors: errors }} />
-          </div>
-          <div className="mb-4">
-            <Input
-              props={{
-                name: "image",
-                type: "file",
-                errors: errors,
-                onChange: onImageChange,
-                ref: fileInput,
-                accept: "image/png, image/jpeg",
-              }}
-            />
-            {image && <img alt="preview image" src={image} />}
-          </div>
-          <div className="flex items-center justify-between form-action">
-            <button
-              className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-              disabled={loading}
-            >
-              Add meal
-            </button>
-          </div>
-        </form>
-      </div>
+      <Form props={{ loading, image, errors, handleSubmit, onImageChange }} />
     </div>
   );
 }
