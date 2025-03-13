@@ -15,7 +15,7 @@ export type Meal = {
 export async function GET(req: { url: string | URL | undefined; }) {
     const authenticated = await requireAuth()
     if (!authenticated)
-        return NextResponse.redirect(new URL('/login', req.url))
+        return NextResponse.json({}, { status: 401, statusText: "Unauthenticated!" });
     try {
         const collection = await mongodbInit()
         const json: Meal[] = await collection.find({}).toArray();
@@ -38,7 +38,7 @@ export function validate(value: string, formData: FormData): boolean {
 export async function POST(req: Request) {
     const authenticated = await requireAuth()
     if (!authenticated)
-        return NextResponse.redirect(new URL('/login', req.url))
+        return NextResponse.json({}, { status: 401, statusText: "Unauthenticated!" });
     try {
         const formData = await req.formData();
         const err: boolean = !validate("name", formData) || !validate("cuisine", formData) || !validate("price", formData)

@@ -2,9 +2,12 @@ import { NextResponse } from "next/server";
 import { ObjectId } from 'mongodb';
 import { mongodbInit } from "@/lib/mongodb";
 import { validate } from "../route";
-import { uploadToS3 } from "@/lib/actions";
+import { requireAuth, uploadToS3 } from "@/lib/actions";
 
 export async function GET(req: Request, { params }: { params: Promise<{ slug: string }> }) {
+    const authenticated = await requireAuth()
+    if (!authenticated)
+        return NextResponse.json({}, { status: 401, statusText: "Unauthenticated!" });
     const param = await params
     const slug = param.slug
     try {
@@ -17,6 +20,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
 }
 
 export async function PUT(req: Request, { params }: { params: Promise<{ slug: string }> }) {
+    const authenticated = await requireAuth()
+    //if (!authenticated)
+    return NextResponse.json({}, { status: 401, statusText: "Unauthenticated!" });
     const param = await params
     const slug = param.slug
     try {

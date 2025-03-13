@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import { mongodbInit } from '@/lib/mongodb';
 import bcrypt from "bcrypt"
-import { ObjectId } from 'mongodb';
-import {createSessionAndCookie} from "@/lib/actions"
+import { createSessionAndCookie } from "@/lib/actions"
 
 export async function POST(req: Request) {
     try {
@@ -13,20 +12,21 @@ export async function POST(req: Request) {
         }
         const collection = await mongodbInit("users")
         const user = await collection.findOne({ email: formData.get("email") });
-        console.log(user);
-        
+
         if (user) {
             const pass = user.password
             const matched = bcrypt.compareSync(formData.get('password'), pass);
-            console.log(matched);
-            
-            await createSessionAndCookie(user._id)
+            if (matched) {
+                await createSessionAndCookie(user._id)
+                return NextResponse.json({}, { status: 200, statusText: matched ? "Yes" : "No" });
 
-            return NextResponse.json({}, { status: 200, statusText: matched ? "Yes" : "No" });
+            }
+
+            return NextResponse.json({}, { status: 401, statusText: "Check your account!" });
 
         }
         else {
-            return NextResponse.json({}, { status: 200, statusText: "Check your account!" });
+            return NextResponse.json({}, { status: 401, statusText: "Check your account!" });
 
         }
 

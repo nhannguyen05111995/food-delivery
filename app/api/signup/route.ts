@@ -9,7 +9,6 @@ export async function POST(req: Request) {
         if (err) {
             return NextResponse.json({}, { status: 400, statusText: "Missing field!" });
         }
-        console.log(formData);
         
         const collection = await mongodbInit("users")
         let object: Record<string, string> = {};

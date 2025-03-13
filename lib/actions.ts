@@ -77,9 +77,8 @@ export async function createSessionAndCookie(userId: string) {
 export async function getCurrentUser() {
     const c = await cookies()
     const sessionId = c.get('sessionId')?.value
-    console.log('ses', sessionId);
     
-    if (!sessionId) return null
+    if (!sessionId) return false
 
     const collection = await mongodbInit("session")
     const user_col = await mongodbInit("users")
@@ -87,22 +86,16 @@ export async function getCurrentUser() {
     const session = await collection.findOne({ _id: ObjectId(sessionId) })
     const user = await user_col.findOne({}, { sessions: ObjectId(sessionId) })
 
-    console.log(session);
-    console.log(user);
-    
-    
-
     if (!session || !user) {
         c.delete('sessionId')
-        return null
+        return false
     }
 
-    return user
+    return true
 }
 
 export async function requireAuth() {
     const user = await getCurrentUser()
-    console.log("user", user);
     return user
 }
 

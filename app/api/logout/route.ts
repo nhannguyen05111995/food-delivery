@@ -12,6 +12,9 @@ export async function GET(req: Request) {
             await collection.deleteOne({ _id: ObjectId(sessionId) });
         }
         c.delete('sessionId')
+
+        return NextResponse.json({}, { statusText: "Logout!", status: 200 });
+
     } catch (err) {
         console.log(err);
 
