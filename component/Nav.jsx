@@ -1,9 +1,12 @@
-'use client';
+
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+//import { usePathname } from 'next/navigation'
+import { requireAuth } from '@/lib/actions'
 import Cart from './Cart'
-function Nav() {
-  const pathname = usePathname()
+async function Nav() {
+  const pathname = ''
+  const authenticated = await requireAuth()
+
 
   return (
     <nav className="bg-gray-800 mb-10">
@@ -24,7 +27,16 @@ function Nav() {
               <div className="flex space-x-4">
                 <Link className={pathname == "/" ? "active rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" : "rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"} href="/" aria-current="page">Meals</Link>
                 <Link className={pathname == "/meals/add-meal" ? "active rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" : "rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"} href="/meals/add-meal" aria-current="page">Add Meal</Link>
-                <Link className={pathname == "/cart" ? "active rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" : "rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"} href="/cart" aria-current="page">Cart <Cart/></Link>
+                <Link className={pathname == "/cart" ? "active rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" : "rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"} href="/cart" aria-current="page">Cart </Link>
+                {authenticated ?
+                  <Link className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" href="/logout" aria-current="page">Logout</Link> :
+                  <>
+                    <Link className={pathname == "/login" ? "active rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" : "rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"} href="/login" aria-current="page">Login</Link>
+                    <Link className={pathname == "/signup" ? "active rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" : "rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"} href="/signup" aria-current="page">Sign up</Link>
+
+                  </>
+                }
+
               </div>
             </div>
           </div>

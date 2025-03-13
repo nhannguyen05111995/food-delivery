@@ -1,11 +1,24 @@
 import { mongodbInit } from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 import { uploadToS3 } from "@/lib/actions";
+import { requireAuth } from "@/lib/actions";
 
-export async function GET() {
+export type Meal = {
+    name: string,
+    cuisine: string,
+    description: string,
+    price: number,
+    image: string,
+    _id: string
+}
+
+export async function GET(req: { url: string | URL | undefined; }) {
+    const authenticated = await requireAuth()
+    if (!authenticated)
+        return NextResponse.redirect(new URL('/login', req.url))
     try {
         const collection = await mongodbInit()
-        const json = await collection.find({}).toArray();
+        const json: Meal[] = await collection.find({}).toArray();
         return NextResponse.json(json);
     } catch (err) {
         return NextResponse.json({ error: err.message });
@@ -14,7 +27,7 @@ export async function GET() {
 
 
 
-function validate(value: string, formData: FormData): boolean {
+export function validate(value: string, formData: FormData): boolean {
     if (formData.get(value)) {
         return true
     }
@@ -23,13 +36,16 @@ function validate(value: string, formData: FormData): boolean {
 }
 
 export async function POST(req: Request) {
+    const authenticated = await requireAuth()
+    if (!authenticated)
+        return NextResponse.redirect(new URL('/login', req.url))
     try {
         const formData = await req.formData();
         const err: boolean = !validate("name", formData) || !validate("cuisine", formData) || !validate("price", formData)
         if (err) {
             return NextResponse.json({ message: "Missing fields!", status: 'failed' });
         }
-        const link = await uploadToS3(formData.get('image') as File)
+        const link = await uploadToS3(formData.get('image_file') as File)
         let object: Record<string, string | File> = {};
         formData.forEach(function (value, key) {
             object[key] = value
@@ -41,4 +57,4 @@ export async function POST(req: Request) {
     } catch (err) {
         return NextResponse.json({ message: err.message, status: 'failed' });
     }
-}
+} 

@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from "react"
-import { Meal } from "../api/meals/route"
+import { Meal } from "./api/meals/route"
 import Item from "@/component/Item"
 export default function Page() {
     const [data, setData] = useState<Meal[]>([])
